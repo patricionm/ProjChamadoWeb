@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Edição de Usuarios</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:growl/>
+            <p:panelGrid columns="2">
+                <f:facet name="header">
+                    <p:outputLabel value="Edição de Usuarios"/>
+                </f:facet>
+                <f:facet name="footer">
+                    <div align="center">
+                        <p:commandButton value="Cancelar"
+                                         action="#{controleUsuario.cancelar()}"
+                                         immediate="true" ajax="false"/>
+                        <p:commandButton value="Salvar"
+                                         action="#{controleUsuario.salvar()}"
+                                         ajax="false"
+                                         icon="ui-icon-disk"/>                                         
+                    </div>
+                </f:facet>
+                <h:outputLabel value="ID" />
+                <h:inputText value="#{controleUsuario.objeto.id}" size="10"
+                             readonly="true"/>
+                <p:outputLabel value="Nome" for="txtNome"/>
+                <p:inputText value="#{controleUsuario.objeto.nome}"
+                             id="txtNome"
+                             size="50" maxlength="50"
+                             placeholder="Obrigatório"/>
+                <p:outputLabel value="Estado" for="selectEstado"/>
+                
+                <p:outputLabel value="Login" for="txtLogin"/>
+                <p:inputText value="#{controleUsuario.objeto.login}"
+                             id="txtLogin"
+                             size="10" maxlength="10"
+                             placeholder="Obrigatório"/>
+                
+                <p:outputLabel value="Senha" for="txtSenha"/>
+                <p:inputText value="#{controleUsuario.objeto.senha}"
+                             id="txtSenha"
+                             size="10" maxlength="10"
+                             placeholder="Obrigatório"/>
+                
+                <p:outputLabel value="Tipo" for="txtTipo"/>
+                <p:selectOneMenu value="Tipo" id="selectTipo">
+                    <f:selectItems value="#{controleCidade.daoEstado.listarTodos}"
+                                   var="e" itemLabel="#{e.nome}"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
