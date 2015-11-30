@@ -6,53 +6,52 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:composition template="/templates/template.xhtml">
-        <ui:define name="titulo">Cadastro de Usuarios</ui:define>
+        <ui:define name="titulo">Cadastro de Tecnicos</ui:define>
         <ui:define name="conteudo">
-            
+
             <h:form>
                 <p:growl/>
                 <p:panelGrid columns="2">
                     <f:facet name="header">
-                        <p:outputLabel value="Edição de Usuarios"/>
+                        <p:outputLabel value="Edição de Tecnicos"/>
                     </f:facet>
                     <f:facet name="footer">
                         <div align="center">
                             <p:commandButton value="Cancelar"
-                                             action="#{controleUsuario.cancelar()}"
+                                             action="#{controleTecnico.cancelar()}"
                                              immediate="true" ajax="false"/>
                             <p:commandButton value="Salvar"
-                                             action="#{controleUsuario.salvar()}"
+                                             action="#{controleTecnico.salvar()}"
                                              ajax="false"
                                              icon="ui-icon-disk"/>                                         
                         </div>
                     </f:facet>
                     <h:outputLabel value="ID" />
-                    <h:inputText value="#{controleUsuario.objeto.id}" size="10"
+                    <h:inputText value="#{controleTecnico.objeto.id}" size="10"
                                  readonly="true"/>
                     <p:outputLabel value="Nome" for="txtNome"/>
-                    <p:inputText value="#{controleUsuario.objeto.nome}"
+                    <p:inputText value="#{controleTecnico.objeto.nome}"
                                  id="txtNome"
                                  size="50" maxlength="50"
                                  placeholder="Obrigatório"/>
-
-                    <p:outputLabel value="Login" for="txtLogin"/>
-                    <p:inputText value="#{controleUsuario.objeto.login}"
-                                 id="txtLogin"
-                                 size="10" maxlength="10"
+                    <p:outputLabel value="Telefone" for="txtTelefone"/>
+                    <p:inputText value="#{controleTecnico.objeto.telefone}"
+                                 id="txtTelefone"
+                                 size="12" maxlength="12"
                                  placeholder="Obrigatório"/>
 
-                    <p:outputLabel value="Senha" for="txtSenha"/>
-                    <p:inputText value="#{controleUsuario.objeto.senha}"
-                                 id="txtSenha"
-                                 size="10" maxlength="10"
-                                 placeholder="Obrigatório"/>
-
-                    <p:outputLabel value="Tipo" for="selectTipo"/>
-                    <p:selectOneMenu value="#{controleUsuario.objeto.tipo}" id="selectTipo">
-                        <f:selectItem itemValue="Administrador" itemLabel="Administrador"/>
-                        <f:selectItem itemValue="Atendente" itemLabel="Atendente"/>
+                    <p:outputLabel value="Categoria" for="selectCategoria"/>
+                    <p:selectOneMenu value="#{controleTecnico.objeto.categoria}" id="selectCategoria">
+                        <f:selectItem itemValue="Responsável Técnico" itemLabel="Responsável Técnico"/>
+                        <f:selectItem itemValue="Técnico Informática" itemLabel="Técnico Informática"/>
                         <f:selectItem itemValue="Estagiário" itemLabel="Estagiário"/>
                     </p:selectOneMenu>
+
+                    <p:outputLabel value="Salario" for="txtSalario"/>
+                    <p:inputText value="#{controleTecnico.objeto.salario}"
+                                 id="txtSalario"
+                                 size="20" maxlength="20"
+                                 placeholder="Obrigatório"/>
                 </p:panelGrid>
             </h:form>
         </ui:define>

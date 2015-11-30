@@ -46,7 +46,7 @@ public class ClientePessoaJuridicaDAO implements Serializable {
     }    
     
     public List<ClientePessoaJuridica> getListarTodos() {
-        return em.createQuery("from ClientePessoaJuridica order by nome").getResultList();
+        return em.createQuery("from ClientePessoaJuridica order by razao_social").getResultList();
     }
     
     public EntityManager getEm() {

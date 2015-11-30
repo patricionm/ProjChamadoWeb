@@ -6,47 +6,68 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:composition template="/templates/template.xhtml">
-        <ui:define name="titulo">Listagem de Cidades</ui:define>
+        <ui:define name="titulo">Listagem de Chamados</ui:define>
         <ui:define name="conteudo">
             
             <h:form>
                 <p:growl/>
 
-                <p:dataTable value="#{controleCidade.dao.listarTodos}"
+                <p:dataTable value="#{controleChamado.dao.listarTodos}"
                              var="obj" emptyMessage="Nenhum registro encontrado">
                     <f:facet name="header">
                         <p:commandButton value="Novo"
-                                         action="#{controleCidade.novo()}"
+                                         action="#{controleChamado.novo()}"
                                          ajax="false"/>                    
-                        <p:outputLabel value="Listagem de Cidades"/>
+                        <p:outputLabel value="Listagem de Chamados"/>
                     </f:facet>
                     <f:facet name="footer">
                         <p:outputLabel 
-                            value="Total de registros: #{controleCidade.dao.listarTodos.size()}"/>
+                            value="Total de registros: #{controleChamado.dao.listarTodos.size()}"/>
                     </f:facet>
                     <p:column headerText="ID">
                         <p:outputLabel value="#{obj.id}"/>
                     </p:column>
-                    <p:column headerText="Nome">
-                        <p:outputLabel value="#{obj.nome}"/>
-                    </p:column>                
-                    <p:column headerText="UF">
-                        <p:outputLabel value="#{obj.uf}"/>
-                    </p:column>
-                    <p:column headerText="Distância">
-                        <p:outputLabel value="#{obj.distancia}"/>
-                    </p:column>
                     <p:column headerText="Descrição">
                         <p:outputLabel value="#{obj.descricao}"/>
+                    </p:column>                
+                    <p:column headerText="Data Abertura">
+                        <p:outputLabel value="#{obj.dtAbertura}">
+                            <f:converter converterId="converterCalendar"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Data Fechamento">
+                        <p:outputLabel value="#{obj.dtFechamento}">
+                            <f:converter converterId="converterCalendar"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Valor">
+                        <p:outputLabel value="#{obj.valor}">
+                            <f:convertNumber pattern="##.##"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Laudo">
+                        <p:outputLabel value="#{obj.laudo}"/>
+                    </p:column>
+                    <p:column headerText="Anexo">
+                        <p:outputLabel value="#{obj.anexo}"/>
+                    </p:column>
+                    <p:column headerText="Cliente">
+                        <p:outputLabel value="#{controleChamado.buscaCliente(obj.cliente.id, obj.cliente.tipo)}"/>
+                    </p:column>
+                    <p:column headerText="Técnico">
+                        <p:outputLabel value="#{obj.tecnico.nome}"/>
+                    </p:column>
+                    <p:column headerText="Usuário">
+                        <p:outputLabel value="#{obj.usuario.login}"/>
                     </p:column>
                     <p:column headerText="Ações">
                         <div align="center">
                             <p:commandButton
-                                action="#{controleCidade.editar(obj.id)}"
+                                action="#{controleChamado.editar(obj.id)}"
                                 icon="ui-icon-pencil" ajax="false"
                                 id="btnAlterar"/> 
                             <p:commandButton
-                                action="#{controleCidade.remover(obj.id)}"
+                                action="#{controleChamado.remover(obj.id)}"
                                 icon="ui-icon-trash"
                                 ajax="false" id="btnExcluir"
                                 onclick="if (!confirm('Confirma a exclusão do objeto?'))

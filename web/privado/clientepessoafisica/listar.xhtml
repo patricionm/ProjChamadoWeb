@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Manutenção de Cliente Pessoa Fisica</ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem" prependId="false">
+                <p:growl/>
+                <p:commandButton actionListener="#{controleClientePessoaFisica.novo()}"
+                                 value="Novo Cliente"
+                                 oncomplete="PF('dlg').show();"
+                                 update=":formEdicao"/>
+                <p:dataTable value="#{controleClientePessoaFisica.dao.listarTodos}"
+                             var="obj">
+                    <f:facet name="header">
+                        <p:outputLabel value="Listagem de Cliente Pessoa Fisica"/>
+                    </f:facet>
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:outputLabel 
+                                value="Total de registros: #{controleClientePessoaFisica.dao.listarTodos.size()}"/>
+                        </div>
+                    </f:facet>
+                    <p:column headerText="ID">
+                        <p:outputLabel value="#{obj.id}"/>
+                    </p:column>
+                    <p:column headerText="Nome">
+                        <p:outputLabel value="#{obj.nome}"/>
+                    </p:column>
+                    <p:column headerText="Ações">
+                        <div align="center">
+                            <p:commandButton                                
+                                actionListener="#{controleClientePessoaFisica.editar(obj.id)}"
+                                icon="ui-icon-pencil"
+                                update=":formEdicao"
+                                process="@form"
+                                oncomplete="PF('dlg').show();"                                
+                                id="btnAlterar"/> 
+                            <p:commandButton                                
+                                actionListener="#{controleClientePessoaFisica.remover(obj.id)}"
+                                icon="ui-icon-trash"
+                                update="@form"
+                                process="@form"
+                                id="btnExcluir"
+                                onclick="if (!confirm('Confirma a exclusão do objeto?'))
+                                            return false"/>                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+
+        <ui:define name="dialogos">
+            <p:dialog widgetVar="dlg" header="Edição"
+                      resizable="false" modal="true">
+                <h:form id="formEdicao" prependId="false">
+                    <p:growl id="growl"/>
+                    <p:tabView id="tab">
+                        <p:tab title="Dados Principais">
+                            <p:panelGrid columns="2">
+                                <f:facet name="footer" >
+                                    <div align="center">
+                                        <p:commandButton value="Salvar"
+                                                         icon="ui-icon-disk"
+                                                         actionListener="#{controleClientePessoaFisica.salvar()}"
+                                                         update=":formEdicao :formListagem"
+                                                         oncomplete="if(!args.validationFailed){PF('dlg').hide();}"/> 
+                                    </div>
+                                </f:facet>
+                                <p:outputLabel value="ID"/>
+                                <p:inputText value="#{controleClientePessoaFisica.objeto.id}" size="10"
+                                             readonly="true"/>
+
+                                <p:outputLabel value="Data Cadastro" for="txtDtCadastro"/>
+                                <p:calendar id="txtDtCadastro" value="#{controleClientePessoaFisica.objeto.dataCadastro}"
+                                            size="10" mask="true" pattern="dd/MM/yyyy"
+                                            navigator="false">
+                                    <f:converter converterId="converterCalendar"/>
+                                </p:calendar>
+
+                                <p:outputLabel value="Endereço" for="txtEndereço"/>
+                                <p:inputText id="txtEndereço" value="#{controleClientePessoaFisica.objeto.endereco}"
+                                             size="50" maxlength="50"/>   
+                                <p:outputLabel value="Email" for="txtEmail"/>
+                                <p:inputText id="txtEmail" value="#{controleClientePessoaFisica.objeto.email}"
+                                             size="50" maxlength="50"/> 
+                                <p:outputLabel value="Tipo" for="selectTipo"/>
+                                <p:selectOneMenu value="#{controleClientePessoaFisica.objeto.tipo}" id="selectTipo">
+                                    <f:selectItem itemValue="F" itemLabel="F" />
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Categoria" for="selectCategoria"/>
+                                <p:selectOneMenu value="#{controleClientePessoaFisica.objeto.categoria}" id="selectCategoria">
+                                    <f:selectItem itemValue="C/ contrato" itemLabel="C/ contrato"/>
+                                    <f:selectItem itemValue="S/ contrato" itemLabel="S/ contrato"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="Situação" for="selectSituacao"/>
+                                <p:selectOneMenu value="#{controleClientePessoaFisica.objeto.situacao}" id="selectSituacao">
+                                    <f:selectItem itemValue="Ativo" itemLabel="Ativo"/>
+                                    <f:selectItem itemValue="Pendente" itemLabel="Pendente"/>
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Nome" for="txtNome"/>
+                                <p:inputText id="txtNome" value="#{controleClientePessoaFisica.objeto.nome}"
+                                             size="50" maxlength="50"/> 
+                                <p:outputLabel value="CPF" for="txtCPF"/>
+                                <p:inputMask id="txtCPF" size="14"
+                                             mask="999.999.999-99" 
+                                             value="#{controleClientePessoaFisica.objeto.cpf}"/>                                  
+
+                                <p:outputLabel value="Cidade" for="selectCidade"/>                               
+                                <p:selectOneMenu value="#{controleClientePessoaFisica.objeto.cidade}"
+                                                 id="selectCidade">
+                                    <f:converter converterId="converterCidade"/>
+                                    <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                                    <f:selectItems value="#{controleClientePessoaFisica.cidadeDao.listarTodos}"
+                                                   var="c" itemLabel="#{c.nome}"/>                                    
+                                </p:selectOneMenu>
+
+                            </p:panelGrid>
+                        </p:tab>
+                        <p:tab title="Telefones">
+                            <p:dataTable value="#{controleClientePessoaFisica.objeto.telefones}"
+                                         var="tel" rowIndexVar="idx" id="listaTelefones">
+                                <f:facet name="header">
+                                    <div align="center">
+                                        <p:commandButton value="Novo Telefone"
+                                                         update=":formTelefone"
+                                                         icon="ui-icon-plus"
+                                                         id="btnNovoTelefone"
+                                                         process="btnNovoTelefone"
+                                                         oncomplete="PF('dlgTelefone').show();"
+                                                         actionListener="#{controleClientePessoaFisica.novoTelefone()}"/>
+                                    </div>                                                                                
+                                </f:facet>
+                                <p:column headerText="DDD">
+                                    <p:outputLabel value="#{tel.ddd}"/>
+                                </p:column>
+                                <p:column headerText="Numero">
+                                    <p:outputLabel value="#{tel.numero}"/>
+                                </p:column>
+                                <p:column headerText="Tipo">
+                                    <p:outputLabel value="#{tel.tipo}"/>
+                                </p:column>
+                                <p:column headerText="Descrição">
+                                    <p:outputLabel value="#{tel.descricao}"/>
+                                </p:column>  
+                                <p:column headerText="Ações">
+                                    <div align="center">
+                                        <p:commandButton id="btnAlterarTelefone"
+                                                         icon="ui-icon-pencil"
+                                                         actionListener="#{controleClientePessoaFisica.alterarTelefone(idx)}"
+                                                         process="btnAlterarTelefone"
+                                                         update=":formTelefone"
+                                                         oncomplete="PF('dlgTelefone').show();"/>
+                                        <p:commandButton id="btnRemoverTelefone"
+                                                         icon="ui-icon-trash"
+                                                         actionListener="#{controleClientePessoaFisica.removerTelefone(idx)}"
+                                                         process="btnRemoverTelefone"
+                                                         update="listaTelefones growl"
+                                                         onclick="if (!confirm('Confirma a exclusão?'))
+                                                                     return false"/>                                                         
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+                </h:form>
+            </p:dialog>
+            <p:dialog header="Edição de telefones" widgetVar="dlgTelefone" resizable="false" 
+                      modal="true">
+                <h:form id="formTelefone">
+                    <p:growl/>
+                    <p:panelGrid columns="2">
+                        <f:facet name="footer">
+                            <div align="center">
+                                <p:commandButton id="btnAdicionarTelefone"
+                                                 value="Salvar" icon="ui-icon-disk"
+                                                 actionListener="#{controleClientePessoaFisica.salvarTelefone()}"
+                                                 update=":formEdicao:tab:listaTelefones :formTelefone :formEdicao:growl"
+                                                 process="txtDDD txtNumero selectTipo txtDescricao btnAdicionarTelefone"
+                                                 oncomplete="if(!args.validationFailed){PF('dlgTelefone').hide();}"/>
+                            </div>
+                        </f:facet>
+                        <p:outputLabel value="DDD" for="txtDDD"/>
+                        <p:inputText id="txtDDD"
+                                     value="#{controleClientePessoaFisica.telefone.ddd}"
+                                     size="30" maxlength="30"/>
+                        <p:outputLabel value="Telefone" for="txtNumero"/>
+                        <p:inputMask id="txtNumero" value="#{controleClientePessoaFisica.telefone.numero}"
+                                     mask="9999-9999"/>
+                        <p:outputLabel value="Tipo" for="selectTipo"/>
+                        <p:selectOneMenu value="#{controleClientePessoaFisica.telefone.tipo}" id="selectTipo">
+                            <f:selectItem itemValue="Celular" itemLabel="Celular"/>
+                            <f:selectItem itemValue="Fixo" itemLabel="Fixo"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Descrição" for="txtDescricao"/>
+                        <p:inputText id="txtDescricao"
+                                     value="#{controleClientePessoaFisica.telefone.descricao}"
+                                     size="50" maxlength="50"/>
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>
+
+
+

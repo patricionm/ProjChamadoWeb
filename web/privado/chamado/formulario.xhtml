@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Cadastro de Chamados</ui:define>
+        <ui:define name="conteudo">
+
+            <h:form>
+                <p:growl/>
+                <p:panelGrid columns="2">
+                    <f:facet name="header">
+                        <p:outputLabel value="Edição de Chamados"/>
+                    </f:facet>
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:commandButton value="Cancelar"
+                                             action="#{controleChamado.cancelar()}"
+                                             immediate="true" ajax="false"/>
+                            <p:commandButton value="Salvar"
+                                             action="#{controleChamado.salvar()}"
+                                             ajax="false"
+                                             icon="ui-icon-disk"/>   
+                            <p:commandButton value="Fechar"
+                                             action="#{controleChamado.fechar()}"
+                                             ajax="false"
+                                             icon="ui-icon-disk" onclick="if (!confirm('Confirma o fechamento do chamado?'))
+                                            return false"/>       
+                        </div>
+                    </f:facet>
+                    <h:outputLabel value="ID" />
+                    <h:inputText value="#{controleChamado.objeto.id}" size="10"
+                                 readonly="true"/>
+                    <p:outputLabel value="Descrição" for="txtDescricao"/>
+                    <p:inputText value="#{controleChamado.objeto.descricao}"
+                                 id="txtDescricao"
+                                 size="50" maxlength="50"
+                                 placeholder="Obrigatório"/>
+                    <p:outputLabel value="Data Abertura" for="txtDtAbertura"/>
+                    <p:calendar id="txtDtAbertura" value="#{controleChamado.objeto.dtAbertura}"
+                                size="10" mask="true" pattern="dd/MM/yyyy"
+                                navigator="false" disabled="true">
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+                    <p:outputLabel value="Data Fechamento" for="txtDtFechamento"/>
+                    <p:calendar id="txtDtFechamento" value="#{controleChamado.objeto.dtFechamento}"
+                                size="10" mask="true" pattern="dd/MM/yyyy"
+                                navigator="false" disabled="true">
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+                    <p:outputLabel value="Valor" for="txtValor"/>
+                    <p:inputText value="#{controleChamado.objeto.valor}"
+                                 id="txtValor"
+                                 size="20" maxlength="20"
+                                 placeholder="Obrigatório">
+                        <f:convertNumber pattern="##.##"/>
+                </p:inputText>
+                <p:outputLabel value="Laudo" for="txtLaudo"/>
+                <p:inputText value="#{controleChamado.objeto.laudo}"
+                             id="txtLaudo"
+                             size="50" maxlength="50"/>
+                <p:outputLabel value="Anexo" for="txtAnexo"/>
+                <p:inputText value="#{controleChamado.objeto.anexo}"
+                             id="txtAnexo"
+                             size="50" maxlength="50"/>
+                <p:outputLabel value="Cliente" for="selectCliente"/>                               
+                <p:selectOneMenu value="#{controleChamado.objeto.cliente}"
+                                 id="selectCliente">
+                    <f:converter converterId="converterCliente"/>
+                    <f:selectItem itemLabel="Selecione um cliente" noSelectionOption="true"/>
+                    <f:selectItems value="#{controleChamado.pfdao.listarTodos}"
+                                   var="f" itemLabel="#{f.nome}"/>
+                    <f:selectItems value="#{controleChamado.pjdao.listarTodos}"
+                                   var="j" itemLabel="#{j.razaoSocial}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Técnico" for="selectTecnico"/>                               
+                <p:selectOneMenu value="#{controleChamado.objeto.tecnico}"
+                                 id="selectTecnico">
+                    <f:converter converterId="converterTecnico"/>
+                    <f:selectItem itemLabel="Selecione um tecnico" noSelectionOption="true"/>
+                    <f:selectItems value="#{controleChamado.tdao.listarTodos}"
+                                   var="t" itemLabel="#{t.nome}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Usuário" for="selectUsuario"/>
+                <p:selectOneMenu value="#{controleChamado.objeto.usuario}"
+                                 id="selectUsuario">
+                    <f:converter converterId="converterUsuario"/>
+                    <f:selectItem itemLabel="Selecione um usuario" noSelectionOption="true"/>
+                    <f:selectItems value="#{controleChamado.udao.listarTodos}"
+                                   var="u" itemLabel="#{u.login}"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
+

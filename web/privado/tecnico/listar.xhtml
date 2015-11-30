@@ -6,23 +6,23 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:composition template="/templates/template.xhtml">
-        <ui:define name="titulo">Listagem de Cidades</ui:define>
+        <ui:define name="titulo">Listagem de Técnicos</ui:define>
         <ui:define name="conteudo">
             
             <h:form>
                 <p:growl/>
 
-                <p:dataTable value="#{controleCidade.dao.listarTodos}"
+                <p:dataTable value="#{controleTecnico.dao.listarTodos}"
                              var="obj" emptyMessage="Nenhum registro encontrado">
                     <f:facet name="header">
                         <p:commandButton value="Novo"
-                                         action="#{controleCidade.novo()}"
+                                         action="#{controleTecnico.novo()}"
                                          ajax="false"/>                    
-                        <p:outputLabel value="Listagem de Cidades"/>
+                        <p:outputLabel value="Listagem de Técnicos"/>
                     </f:facet>
                     <f:facet name="footer">
                         <p:outputLabel 
-                            value="Total de registros: #{controleCidade.dao.listarTodos.size()}"/>
+                            value="Total de registros: #{controleTecnico.dao.listarTodos.size()}"/>
                     </f:facet>
                     <p:column headerText="ID">
                         <p:outputLabel value="#{obj.id}"/>
@@ -30,23 +30,23 @@
                     <p:column headerText="Nome">
                         <p:outputLabel value="#{obj.nome}"/>
                     </p:column>                
-                    <p:column headerText="UF">
-                        <p:outputLabel value="#{obj.uf}"/>
+                    <p:column headerText="Telefone">
+                        <p:outputLabel value="#{obj.telefone}"/>
                     </p:column>
-                    <p:column headerText="Distância">
-                        <p:outputLabel value="#{obj.distancia}"/>
+                    <p:column headerText="Categoria">
+                        <p:outputLabel value="#{obj.categoria}"/>
                     </p:column>
-                    <p:column headerText="Descrição">
-                        <p:outputLabel value="#{obj.descricao}"/>
+                    <p:column headerText="Salário">
+                        <p:outputLabel value="#{obj.salario}"/>
                     </p:column>
                     <p:column headerText="Ações">
                         <div align="center">
                             <p:commandButton
-                                action="#{controleCidade.editar(obj.id)}"
+                                action="#{controleTecnico.editar(obj.id)}"
                                 icon="ui-icon-pencil" ajax="false"
                                 id="btnAlterar"/> 
                             <p:commandButton
-                                action="#{controleCidade.remover(obj.id)}"
+                                action="#{controleTecnico.remover(obj.id)}"
                                 icon="ui-icon-trash"
                                 ajax="false" id="btnExcluir"
                                 onclick="if (!confirm('Confirma a exclusão do objeto?'))

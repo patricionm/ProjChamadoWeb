@@ -21,15 +21,24 @@
                 <h:form id="formMenu" prependId="false">
                     <p:menu>
                         <p:submenu label="Cadastros">
-                            <p:menuitem action="#{controleEstado.listar()}"
-                                        value="Cadastro de estados"
-                                        ajax="false"/>
                             <p:menuitem action="#{controleCidade.listar()}"
-                                        value="Cadastro de cidades"
+                                        value="Cadastro de Cidades"
                                         ajax="false"/>
-                            <p:menuitem action="#{controlePessoaFisica.listar()}"
-                                        value="Cadastro de Pessoas Fisicas"
-                                        ajax="false"/>                            
+                            <p:menuitem action="#{controleTecnico.listar()}"
+                                        value="Cadastro Téncicos"
+                                        ajax="false"/>
+                            <p:menuitem action="#{controleUsuario.listar()}"
+                                        value="Cadastro Usuarios"
+                                        ajax="false"/>
+                            <p:menuitem action="#{controleClientePessoaFisica.listar()}"
+                                        value="Cadastro Cliente Pessoa Fisica"
+                                        ajax="false"/>
+                            <p:menuitem action="#{controleClientePessoaJuridica.listar()}"
+                                        value="Cadastro Cliente Pessoa Juridica"
+                                        ajax="false"/> 
+                            <p:menuitem action="#{controleChamado.listar()}"
+                                        value="Cadastro Chamados"
+                                        ajax="false"/> 
                         </p:submenu>
                     </p:menu>
                 </h:form>               

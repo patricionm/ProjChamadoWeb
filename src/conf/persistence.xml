@@ -3,6 +3,14 @@
   <persistence-unit name="SistChamados-WebPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>jdbc/chamados</jta-data-source>
+    <class>chamados.modelo.Cidade</class>
+    <class>chamados.modelo.Tecnico</class>
+    <class>chamados.modelo.Usuario</class>
+    <class>chamados.modelo.Cliente</class>
+    <class>chamados.modelo.Telefone</class>
+    <class>chamados.modelo.ClientePessoaFisica</class>
+    <class>chamados.modelo.ClientePessoaJuridica</class>
+    <class>chamados.modelo.Chamado</class>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
