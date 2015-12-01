@@ -4,62 +4,38 @@ package chamados.dao;
 
 import chamados.modelo.ClientePessoaFisica;
 import java.io.Serializable;
-import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ejb.Stateful;
 
 /**
  *
  * @author Jorge Luis Boeira Bavaresco
  * @email jorge.bavaresco@passofundo.ifsul.edu.br
  */
-@Stateless
-public class ClientePessoaFisicaDAO implements Serializable {
-
-    @PersistenceContext(unitName = "SistChamados-WebPU")
-    private EntityManager em;
-    private List<ClientePessoaFisica> listarTodos;
+@Stateful
+public class ClientePessoaFisicaDAO<T> extends GenericDAO<ClientePessoaFisica> implements Serializable {
 
     public ClientePessoaFisicaDAO(){
+        super();
+        super.setPersistentClass(ClientePessoaFisica.class);
+        super.getListOrder().add(new Order("id", "ID", "#"));
+        super.getListOrder().add(new Order("nome", "Nome", "like"));
+        super.setCurrentOrder(super.getListOrder().get(1));
+        super.setFilter("");
+        super.setConverterOrder(new ConverterOrder(super.getListOrder()));
+    }  
+ 
+ public String retornaClientePF(Integer idx) throws Exception{
+     return ClientePessoaFisicaDAO.super.getObjectById(idx).getNome();
+ }
+ 
+ @Override
+ public ClientePessoaFisica getObjectById(Integer id) throws Exception{ 
         
-    }
-    
-    public void persist(ClientePessoaFisica obj) throws Exception {
-        em.persist(obj);
-    }
-    
-    public void merge(ClientePessoaFisica obj) throws Exception {
-        em.merge(obj);
-    }    
-    
-    public void remove(ClientePessoaFisica obj) throws Exception {
-        obj = em.merge(obj);
-        em.remove(obj);
-    }
-    
-    public ClientePessoaFisica getObjectById(Integer id) throws Exception {
-        ClientePessoaFisica obj = (ClientePessoaFisica) em.find(ClientePessoaFisica.class, id);
-        // Forçando a recuperação dos telefones e desejos do banco
-        obj.getTelefones().size();
-        return obj;
-    }    
-    
-    public List<ClientePessoaFisica> getListarTodos() {
-        return em.createQuery("from ClientePessoaFisica order by nome").getResultList();
-    }
-    
-    public EntityManager getEm() {
-        return em;
+       ClientePessoaFisica obj = (ClientePessoaFisica) ClientePessoaFisicaDAO.this.getEm().find(ClientePessoaFisica.class, id);
+        
+       obj.getTelefones().size();
+       
+       return obj;
     }
 
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
-
-
-    public void setListarTodos(List<ClientePessoaFisica> listarTodos) {
-        this.listarTodos = listarTodos;
-    }
 }

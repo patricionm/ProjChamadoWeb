@@ -20,7 +20,7 @@
                           size="170">
                 <h:form id="formMenu" prependId="false">
                     <p:menu>
-                        <p:submenu label="Cadastros">
+                        <p:submenu label="Cadastros" rendered="#{controleLogin.usuarioLogado != null}">
                             <p:menuitem action="#{controleCidade.listar()}"
                                         value="Cadastro de Cidades"
                                         ajax="false"/>
@@ -39,6 +39,16 @@
                             <p:menuitem action="#{controleChamado.listar()}"
                                         value="Cadastro Chamados"
                                         ajax="false"/> 
+                        </p:submenu>
+                        <p:submenu label="Sair" rendered="#{controleLogin.usuarioLogado != null}">
+                            <p:menuitem action="#{controleLogin.efetuarLogOut()}"
+                                        value="Logout"
+                                        ajax="false"/>
+                        </p:submenu>
+                        <p:submenu label="Login" rendered="#{controleLogin.usuarioLogado == null}">
+                            <p:menuitem action="#{controleLogin.paginaLogin()}"
+                                        value="Login"
+                                        ajax="false"/>
                         </p:submenu>
                     </p:menu>
                 </h:form>               

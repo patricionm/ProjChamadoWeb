@@ -7,57 +7,48 @@ package chamados.dao;
 
 import chamados.modelo.Usuario;
 import java.io.Serializable;
-import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ejb.Stateful;
+import javax.persistence.Query;
 
 /**
  *
  * @author patricio
  */
-@Stateless
-public class UsuarioDAO implements Serializable{
-    
-    @PersistenceContext(unitName = "SistChamados-WebPU")
-    private EntityManager em;
-    private List<Usuario> listarTodos;
+@Stateful
+public class UsuarioDAO<T> extends GenericDAO<Usuario>implements Serializable{
 
     public UsuarioDAO(){
+        super();
+        super.setPersistentClass(Usuario.class);
+        super.getListOrder().add(new Order("id", "ID", "#"));
+        super.getListOrder().add(new Order("nome", "Nome", "like"));
+        super.setCurrentOrder(super.getListOrder().get(1));
+        super.setFilter("");
+        super.setConverterOrder(new ConverterOrder(super.getListOrder()));
+    }
+    
+    @Override
+    public Usuario getObjectById(Integer id){
+        Usuario obj = super.getEm().find(Usuario.class, id);
         
-    }
-    
-    public void persist(Usuario obj) throws Exception {
-        em.persist(obj);
-    }
-    
-    public void merge(Usuario obj) throws Exception {
-        em.merge(obj);
-    }    
-    
-    public void remove(Usuario obj) throws Exception {
-        obj = em.merge(obj);
-        em.remove(obj);
-    }
-    
-    public Usuario getObjectById(Integer id) throws Exception {
-        return (Usuario) em.find(Usuario.class, id);
-    }    
-    
-    public List<Usuario> getListarTodos() {
-        return em.createQuery("from Usuario order by nome").getResultList();
-    }
-    
-    public EntityManager getEm() {
-        return em;
+        return obj;
     }
 
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
-    public void setListarTodos(List<Usuario> listarTodos) {
-        this.listarTodos = listarTodos;
+    public boolean login(String usuario, String senha){
+        Query query = super.getEm().createQuery("from Usuario where upper(login) = :usuario and upper(senha) = :senha");
+        query.setParameter("usuario", usuario.toUpperCase());
+        query.setParameter("senha", senha.toUpperCase());
+        if(!query.getResultList().isEmpty()){
+            return true;
+        } else {
+            return false;
+        }
     }
     
+    public Usuario localizaPorNomeUsuario(String usuario){
+        Usuario obj = (Usuario)
+                super.getEm().createQuery("from Usuario where upper(login) = :usuario").
+                        setParameter("usuario", usuario.toUpperCase()).getSingleResult();
+        return obj;
+    }
 }

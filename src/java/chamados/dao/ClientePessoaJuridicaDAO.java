@@ -4,62 +4,37 @@ package chamados.dao;
 
 import chamados.modelo.ClientePessoaJuridica;
 import java.io.Serializable;
-import java.util.List;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ejb.Stateful;
 
 /**
  *
  * @author Jorge Luis Boeira Bavaresco
  * @email jorge.bavaresco@passofundo.ifsul.edu.br
  */
-@Stateless
-public class ClientePessoaJuridicaDAO implements Serializable {
-
-    @PersistenceContext(unitName = "SistChamados-WebPU")
-    private EntityManager em;
-    private List<ClientePessoaJuridica> listarTodos;
+@Stateful
+public class ClientePessoaJuridicaDAO<T> extends GenericDAO<ClientePessoaJuridica> implements Serializable {
 
     public ClientePessoaJuridicaDAO(){
+        super();
+        super.setPersistentClass(ClientePessoaJuridica.class);
+        super.getListOrder().add(new Order("id", "ID", "#"));
+        super.getListOrder().add(new Order("razao_social", "Razão Social", "like"));
+        super.setCurrentOrder(super.getListOrder().get(1));
+        super.setFilter("");
+        super.setConverterOrder(new ConverterOrder(super.getListOrder()));
+    }
+    
+    public String retornaClientePJ(Integer idx) throws Exception{
+     return ClientePessoaJuridicaDAO.super.getObjectById(idx).getRazaoSocial();
+ }
+    
+ @Override
+ public ClientePessoaJuridica getObjectById(Integer id) throws Exception{ 
         
-    }
-    
-    public void persist(ClientePessoaJuridica obj) throws Exception {
-        em.persist(obj);
-    }
-    
-    public void merge(ClientePessoaJuridica obj) throws Exception {
-        em.merge(obj);
-    }    
-    
-    public void remove(ClientePessoaJuridica obj) throws Exception {
-        obj = em.merge(obj);
-        em.remove(obj);
-    }
-    
-    public ClientePessoaJuridica getObjectById(Integer id) throws Exception {
-        ClientePessoaJuridica obj = (ClientePessoaJuridica) em.find(ClientePessoaJuridica.class, id);
-        // Forçando a recuperação dos telefones e desejos do banco
-        obj.getTelefones().size();
-        return obj;
-    }    
-    
-    public List<ClientePessoaJuridica> getListarTodos() {
-        return em.createQuery("from ClientePessoaJuridica order by razao_social").getResultList();
-    }
-    
-    public EntityManager getEm() {
-        return em;
-    }
-
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
-
-
-    public void setListarTodos(List<ClientePessoaJuridica> listarTodos) {
-        this.listarTodos = listarTodos;
+       ClientePessoaJuridica obj = (ClientePessoaJuridica) ClientePessoaJuridicaDAO.this.getEm().find(ClientePessoaJuridica.class, id);
+        
+       obj.getTelefones().size();
+       
+       return obj;
     }
 }

@@ -22,7 +22,7 @@ import javax.faces.bean.SessionScoped;
 public class ControleCidade implements Serializable{
     
     @EJB
-    private CidadeDAO dao;
+    private CidadeDAO<Cidade> dao;
     private Cidade objeto;
     
     public ControleCidade() {

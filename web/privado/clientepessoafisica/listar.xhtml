@@ -10,19 +10,63 @@
         <ui:define name="conteudo">
             <h:form id="formListagem" prependId="false">
                 <p:growl/>
+
+                <div align="center">
+                    <p:panelGrid columns="1">
+                        <f:facet name="header">  
+                            Filtro Ordenação e Paginação 
+                        </f:facet>                          
+                        <p:column  colspan="13" rowspan="1">                                                        
+                            <h:outputLabel for="ordem" value="Ordem" />     
+                            <h:selectOneMenu id="ordem" 
+                                             value="#{controleClientePessoaFisica.dao.currentOrder}"
+                                             converter="#{controleClientePessoaFisica.dao.converterOrder}">
+                                <f:selectItems value="#{controleClientePessoaFisica.dao.listOrder}" />
+                                <p:ajax update="formListagem" 
+                                        listener="#{controleClientePessoaFisica.listar()}"/>
+                            </h:selectOneMenu>                            
+                            <h:outputLabel for="maximoObjetos" value="Máximo de objetos" />
+                            <p:inputText id="maximoObjetos"  
+                                         value="#{controleClientePessoaFisica.dao.maxObjects}" size="2"
+                                         onkeydown="Mascara(this, Integer);"
+                                         onkeypress="Mascara(this, Integer);"
+                                         onkeyup="Mascara(this, Integer);">
+                                <p:ajax update="tabela"
+                                        listener="#{controleClientePessoaFisica.listar()}" event="keyup"/>                          
+                            </p:inputText>                      
+                            <h:outputLabel for="filtro" value="Filtro" />
+                            <p:inputText id="filtro" placeholder="Digite o filtro"
+                                         value="#{controleClientePessoaFisica.dao.filter}" >
+                                <p:ajax update="tabela" 
+                                        listener="#{controleClientePessoaFisica.listar()}" event="keyup"/>                            
+                            </p:inputText>
+                            <p:commandButton id="btnFiltrar" update="formListagem" 
+                                             actionListener="#{controleClientePessoaFisica.listar()}" icon="ui-icon-search" />  
+                            <p:commandButton id="btnPrimeiro" update="formListagem" 
+                                             actionListener="#{controleClientePessoaFisica.dao.first()}" icon="ui-icon-seek-start"/>  
+                            <p:commandButton id="btnAnterior" update="formListagem" 
+                                             actionListener="#{controleClientePessoaFisica.dao.previous()}" icon="ui-icon-seek-prev"/>  
+                            <p:commandButton  id="btnProximo" update="formListagem" 
+                                              actionListener="#{controleClientePessoaFisica.dao.next()}" icon="ui-icon-seek-next"/>  
+                            <p:commandButton id="btnUltimo" update="formListagem" 
+                                             actionListener="#{controleClientePessoaFisica.dao.last()}" icon="ui-icon-seek-end" /> 
+                        </p:column>  
+                    </p:panelGrid>                     
+                </div>  
+
                 <p:commandButton actionListener="#{controleClientePessoaFisica.novo()}"
                                  value="Novo Cliente"
                                  oncomplete="PF('dlg').show();"
                                  update=":formEdicao"/>
-                <p:dataTable value="#{controleClientePessoaFisica.dao.listarTodos}"
-                             var="obj">
+                <p:dataTable value="#{controleClientePessoaFisica.dao.listObjects}"
+                             var="obj" id="tabela">
                     <f:facet name="header">
                         <p:outputLabel value="Listagem de Cliente Pessoa Fisica"/>
                     </f:facet>
                     <f:facet name="footer">
                         <div align="center">
                             <p:outputLabel 
-                                value="Total de registros: #{controleClientePessoaFisica.dao.listarTodos.size()}"/>
+                                value="#{controleClientePessoaFisica.dao.navigationMessage}"/>
                         </div>
                     </f:facet>
                     <p:column headerText="ID">
@@ -78,7 +122,7 @@
                                 <p:outputLabel value="Data Cadastro" for="txtDtCadastro"/>
                                 <p:calendar id="txtDtCadastro" value="#{controleClientePessoaFisica.objeto.dataCadastro}"
                                             size="10" mask="true" pattern="dd/MM/yyyy"
-                                            navigator="false">
+                                            navigator="false" disabled="true">
                                     <f:converter converterId="converterCalendar"/>
                                 </p:calendar>
 
@@ -116,7 +160,7 @@
                                                  id="selectCidade">
                                     <f:converter converterId="converterCidade"/>
                                     <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
-                                    <f:selectItems value="#{controleClientePessoaFisica.cidadeDao.listarTodos}"
+                                    <f:selectItems value="#{controleClientePessoaFisica.cidadeDao.listObjects}"
                                                    var="c" itemLabel="#{c.nome}"/>                                    
                                 </p:selectOneMenu>
 

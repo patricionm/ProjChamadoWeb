@@ -11,6 +11,7 @@ import chamados.modelo.ClientePessoaFisica;
 import chamados.modelo.Telefone;
 import chamados.uteis.Util;
 import java.io.Serializable;
+import java.util.Calendar;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -24,7 +25,7 @@ import javax.faces.bean.ViewScoped;
 public class ControleClientePessoaFisica implements Serializable{
     
     @EJB
-    private ClientePessoaFisicaDAO dao;
+    private ClientePessoaFisicaDAO<ClientePessoaFisica> dao;
     private ClientePessoaFisica objeto;
     
     @EJB
@@ -46,6 +47,7 @@ public class ControleClientePessoaFisica implements Serializable{
     public void salvar() {
         try {
             if (objeto.getId() == null) {
+                objeto.setDataCadastro(Calendar.getInstance());
                 dao.persist(objeto);
             } else {
                 dao.merge(objeto);

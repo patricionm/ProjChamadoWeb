@@ -8,12 +8,55 @@
     <ui:composition template="/templates/template.xhtml">
         <ui:define name="titulo">Listagem de Técnicos</ui:define>
         <ui:define name="conteudo">
-            
-            <h:form>
+
+            <h:form id="formListagem">
                 <p:growl/>
 
-                <p:dataTable value="#{controleTecnico.dao.listarTodos}"
-                             var="obj" emptyMessage="Nenhum registro encontrado">
+                <div align="center">
+                    <p:panelGrid columns="1">
+                        <f:facet name="header">  
+                            Filtro Ordenação e Paginação 
+                        </f:facet>                          
+                        <p:column  colspan="13" rowspan="1">                                                        
+                            <h:outputLabel for="ordem" value="Ordem" />     
+                            <h:selectOneMenu id="ordem" 
+                                             value="#{controleTecnico.dao.currentOrder}"
+                                             converter="#{controleTecnico.dao.converterOrder}">
+                                <f:selectItems value="#{controleTecnico.dao.listOrder}" />
+                                <p:ajax update="formListagem" 
+                                        listener="#{controleTecnico.listar()}"/>
+                            </h:selectOneMenu>                            
+                            <h:outputLabel for="maximoObjetos" value="Máximo de objetos" />
+                            <p:inputText id="maximoObjetos"  
+                                         value="#{controleTecnico.dao.maxObjects}" size="2"
+                                         onkeydown="Mascara(this, Integer);"
+                                         onkeypress="Mascara(this, Integer);"
+                                         onkeyup="Mascara(this, Integer);">
+                                <p:ajax update="tabela"
+                                        listener="#{controleTecnico.listar()}" event="keyup"/>                          
+                            </p:inputText>                      
+                            <h:outputLabel for="filtro" value="Filtro" />
+                            <p:inputText id="filtro" placeholder="Digite o filtro"
+                                         value="#{controleTecnico.dao.filter}" >
+                                <p:ajax update="tabela" 
+                                        listener="#{controleTecnico.listar()}" event="keyup"/>                            
+                            </p:inputText>
+                            <p:commandButton id="btnFiltrar" update="formListagem" 
+                                             actionListener="#{controleTecnico.listar()}" icon="ui-icon-search" />  
+                            <p:commandButton id="btnPrimeiro" update="formListagem" 
+                                             actionListener="#{controleTecnico.dao.first()}" icon="ui-icon-seek-start"/>  
+                            <p:commandButton id="btnAnterior" update="formListagem" 
+                                             actionListener="#{controleTecnico.dao.previous()}" icon="ui-icon-seek-prev"/>  
+                            <p:commandButton  id="btnProximo" update="formListagem" 
+                                              actionListener="#{controleTecnico.dao.next()}" icon="ui-icon-seek-next"/>  
+                            <p:commandButton id="btnUltimo" update="formListagem" 
+                                             actionListener="#{controleTecnico.dao.last()}" icon="ui-icon-seek-end" /> 
+                        </p:column>  
+                    </p:panelGrid>                     
+                </div>  
+
+                <p:dataTable value="#{controleTecnico.dao.listObjects}"
+                             var="obj" emptyMessage="Nenhum registro encontrado" id="tabela">
                     <f:facet name="header">
                         <p:commandButton value="Novo"
                                          action="#{controleTecnico.novo()}"
@@ -22,7 +65,7 @@
                     </f:facet>
                     <f:facet name="footer">
                         <p:outputLabel 
-                            value="Total de registros: #{controleTecnico.dao.listarTodos.size()}"/>
+                            value="#{controleTecnico.dao.navigationMessage}"/>
                     </f:facet>
                     <p:column headerText="ID">
                         <p:outputLabel value="#{obj.id}"/>

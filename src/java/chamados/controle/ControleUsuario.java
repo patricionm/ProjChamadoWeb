@@ -22,7 +22,7 @@ import javax.faces.bean.SessionScoped;
 public class ControleUsuario implements Serializable{
     
     @EJB
-    private UsuarioDAO dao;
+    private UsuarioDAO<Usuario> dao;
     private Usuario objeto;
     
     public ControleUsuario() {

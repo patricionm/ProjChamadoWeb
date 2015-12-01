@@ -22,7 +22,7 @@ import javax.faces.bean.SessionScoped;
 public class ControleTecnico implements Serializable{
     
     @EJB
-    private TecnicoDAO dao;
+    private TecnicoDAO<Tecnico> dao;
     private Tecnico objeto;
     
     public ControleTecnico() {

@@ -27,7 +27,7 @@ import javax.faces.bean.SessionScoped;
 public class ControleChamado implements Serializable{
     
     @EJB
-    private ChamadoDAO dao;
+    private ChamadoDAO<Chamado> dao;
     private Chamado objeto;
     
     @EJB
@@ -161,9 +161,9 @@ public class ControleChamado implements Serializable{
     
     public String buscaCliente(Integer idx, String t) throws Exception{
         if(t.equals("F"))
-            return pfdao.getObjectById(idx).getNome();
+            return pfdao.retornaClientePF(idx);
         else
-            return pjdao.getObjectById(idx).getRazaoSocial();
+            return pjdao.retornaClientePJ(idx);
     }
     
 }
